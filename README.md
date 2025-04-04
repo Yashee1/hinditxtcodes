@@ -1,2 +1,2 @@
 # hinditxtcodes
-Codes that helped me with Devanagari scripts
+Codes that helped me with pdf in Devanagari scripts
