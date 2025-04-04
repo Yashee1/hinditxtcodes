@@ -1,0 +1,48 @@
+import pytesseract
+from PIL import Image
+import os
+
+# Set Tesseract command path (make sure Tesseract is installed)
+pytesseract.pytesseract.tesseract_cmd = r'your path'
+
+# Folder containing images (make sure all images are in this folder)
+images_folder_path = r"your path"
+
+# Output text file path
+output_txt_path = r"your path"
+
+def extract_text_from_images(images_folder_path, output_txt_path):
+    text = ""
+
+    # List all image files in the folder that match your pattern (.jpg)
+    image_files = [f for f in os.listdir(images_folder_path) if f.endswith('.jpg')]
+
+    # Sort the images to process in correct order (e.g., 0001.jpg, 0002.jpg, etc.)
+    image_files.sort()
+
+    # Process each image file
+    for image_file in image_files:
+        print(f"Processing {image_file}...")
+
+        # Create the full path to the image file
+        image_path = os.path.join(images_folder_path, image_file)
+
+        # Open the image
+        img = Image.open(image_path)
+
+        # Perform OCR using Tesseract (Hindi)
+        extracted_text = pytesseract.image_to_string(img, lang="hin", config="--psm 6")
+
+        # Append the extracted text to the final text variable
+        text += f"--- Start of {image_file} ---\n"
+        text += extracted_text + "\n"
+        text += f"--- End of {image_file} ---\n\n"
+
+    # Save the final text to a text file
+    with open(output_txt_path, "w", encoding="utf-8") as f:
+        f.write(text)
+
+    print(f"✅ OCR text extraction complete! Output saved at: {output_txt_path}")
+
+# Run the function
+extract_text_from_images(images_folder_path, output_txt_path)
